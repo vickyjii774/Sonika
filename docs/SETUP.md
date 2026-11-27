@@ -16,15 +16,16 @@
 4. Run `npm run dev`.
 
 ## Render backend and PostgreSQL
-1. Create a Render Blueprint from this repository and review resources/pricing before confirming.
-2. The Blueprint describes the Django web service and PostgreSQL database. Confirm the database plan, expiry and current pricing in Render; free database availability and retention can change. For business-critical data, choose a persistent paid database or supported external PostgreSQL provider.
-3. Set `FRONTEND_URL` and `CORS_ALLOWED_ORIGINS` to the exact Vercel URL (including https://).
-4. Set `IMAGEKIT_PUBLIC_KEY` and `IMAGEKIT_PRIVATE_KEY` after creating the separate ImageKit account. Keep the private key only in Render.
-5. Optionally set `DJANGO_SUPERUSER_USERNAME`, `DJANGO_SUPERUSER_EMAIL`, and `DJANGO_SUPERUSER_PASSWORD` in Render before first deploy. The build command creates that admin once; it will not overwrite an existing account. Remove the password environment variable after the first successful deployment.
-6. Health check: `/api/health/`.
+1. Create a Render Blueprint from this repository and review the service settings before confirming.
+2. The Blueprint creates only the Django web service. It deliberately does not provision a database automatically, so you can choose your own PostgreSQL provider and avoid an unexpected charge or expiring free database.
+3. Create a PostgreSQL database with your preferred provider (for example, Render PostgreSQL or Neon), then add its connection string as the Render `DATABASE_URL` environment variable. Check the provider's current free-tier limits, expiry and backup policy before using it for business data.
+4. Set `FRONTEND_URL` and `CORS_ALLOWED_ORIGINS` to the exact Vercel URL (including https://).
+5. Set `IMAGEKIT_PUBLIC_KEY` and `IMAGEKIT_PRIVATE_KEY` after creating the separate ImageKit account. Keep the private key only in Render.
+6. Optionally set `DJANGO_SUPERUSER_USERNAME`, `DJANGO_SUPERUSER_EMAIL`, and `DJANGO_SUPERUSER_PASSWORD` in Render before first deploy. The build command creates that admin once; it will not overwrite an existing account. Remove the password environment variable after the first successful deployment.
+7. Health check: `/api/health/`.
 
 ## Vercel frontend
-1. Import this repository into Vercel. Keep project root at repository root.
+1. Import the repository into Vercel. Keep project root at repository root.
 2. Root `vercel.json` builds `frontend` and publishes `frontend/dist`.
 3. Set `VITE_API_URL=https://YOUR-RENDER-SERVICE.onrender.com/api` and redeploy.
 
@@ -41,4 +42,4 @@ In Admin → Shop settings, paste a Google Maps embed URL (Google Maps → Share
 - Use a strong unique Django secret key and keep DEBUG=false.
 - Restrict ALLOWED_HOSTS and CORS to actual domains.
 - Verify admin CRUD, image uploads, map embed and product browsing on deployed services.
-- Back up PostgreSQL regularly. Render's free web service may sleep when idle; verify database persistence/expiry before relying on a free database for shop operations.
+- Back up PostgreSQL regularly and confirm the provider's data retention and recovery options.
