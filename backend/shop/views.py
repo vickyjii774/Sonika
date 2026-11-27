@@ -11,7 +11,8 @@ def health(request): return JsonResponse({"status":"ok","service":"sonika-api"})
 class AdminWriteViewSet(viewsets.ModelViewSet):
  def get_permissions(self): return [AllowAny()] if self.request.method in SAFE_METHODS else [IsAdminUser()]
 class CategoryViewSet(AdminWriteViewSet):
- queryset=Category.objects.filter(is_active=True); lookup_field="slug"
+ lookup_field="slug"
+ def get_queryset(self): return Category.objects.all() if self.request.user.is_staff else Category.objects.filter(is_active=True)
  class S(serializers.ModelSerializer):
   class Meta: model=Category; fields="__all__"
  serializer_class=S
@@ -23,7 +24,7 @@ class ProductViewSet(AdminWriteViewSet):
  serializer_class=S
  def get_queryset(self):
   q=Product.objects.select_related("category")
-  if self.request.method in SAFE_METHODS: q=q.filter(is_available=True)
+  if self.request.method in SAFE_METHODS and not self.request.user.is_staff: q=q.filter(is_available=True)
   if self.request.query_params.get("category"): q=q.filter(category__slug=self.request.query_params["category"])
   if self.request.query_params.get("search"): q=q.filter(name__icontains=self.request.query_params["search"])
   if self.request.query_params.get("featured")=="true": q=q.filter(is_featured=True)
