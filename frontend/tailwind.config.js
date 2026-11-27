@@ -1,0 +1,1 @@
+export default {content:["./index.html","./src/**/*.{js,jsx}"],theme:{extend:{colors:{sonika:{pink:"#fce4ec",blue:"#dceafa",red:"#f4a6a6",ink:"#34343a",cream:"#fff8fa"}}}},plugins:[]};
