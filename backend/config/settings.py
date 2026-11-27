@@ -18,7 +18,7 @@ LANGUAGE_CODE="en-us"; TIME_ZONE="Asia/Kathmandu"; USE_I18N=True; USE_TZ=True
 STATIC_URL="static/"; STATIC_ROOT=BASE_DIR/"staticfiles"
 STORAGES={"staticfiles":{"BACKEND":"whitenoise.storage.CompressedManifestStaticFilesStorage"},"default":{"BACKEND":"django.core.files.storage.FileSystemStorage"}}
 DEFAULT_AUTO_FIELD="django.db.models.BigAutoField"
-CORS_ALLOWED_ORIGINS=[x.strip() for x in os.getenv("CORS_ALLOWED_ORIGINS",FRONTEND_URL).split(",") if x.strip()]
+CORS_ALLOWED_ORIGINS=list(dict.fromkeys([x.strip() for x in os.getenv("CORS_ALLOWED_ORIGINS",FRONTEND_URL).split(",") if x.strip()]+["http://localhost:5173","http://127.0.0.1:5173"]))
 CSRF_TRUSTED_ORIGINS=[x.strip() for x in os.getenv("CSRF_TRUSTED_ORIGINS",FRONTEND_URL).split(",") if x.strip()]
 REST_FRAMEWORK={"DEFAULT_AUTHENTICATION_CLASSES":("rest_framework_simplejwt.authentication.JWTAuthentication",),"DEFAULT_PERMISSION_CLASSES":("rest_framework.permissions.AllowAny",),"DEFAULT_RENDERER_CLASSES":("rest_framework.renderers.JSONRenderer",)}
 SIMPLE_JWT={"ACCESS_TOKEN_LIFETIME":timedelta(minutes=45),"REFRESH_TOKEN_LIFETIME":timedelta(days=7)}
